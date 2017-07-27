@@ -1,7 +1,8 @@
+#!/usr/bin/env python
 import subprocess
+from StringIO import StringIO
 import sys
 import hashlib
-import StringIO
 
 
 def unpack_der(der):
@@ -62,7 +63,7 @@ def base58check(app_byte, in_bytes):
         rem = e % 58
         e /= 58
         reversed_b58 += BASE_58_ALPHABET[rem]
-    assert not reversed_b58.endswith('1')
+    # assert not reversed_b58.endswith('1')
     reversed_b58 += '1' * (len(d) - len(d.lstrip('\x00')))
     return reversed_b58[::-1]
 
@@ -77,14 +78,14 @@ def get_address(public_key):
     b.update(a)
     c = b.digest()
     assert len(c) == 20
-    return base58check('\x00', c)
+    return base58check('\x42', c)
 
 
 def get_private_key_wif(private_key):
     """
     https://en.bitcoin.it/wiki/Wallet_import_format
     """
-    return base58check('\x80', private_key)
+    return base58check('\x99', private_key)
 
 
 if __name__ == '__main__':
@@ -101,11 +102,11 @@ if __name__ == '__main__':
     try:
         private_key, public_key = unpack_der(output)
         wif = get_private_key_wif(private_key)
-        assert all([c in BASE_58_ALPHABET for c in wif])
-        assert wif.startswith('P')
+        # assert all([c in BASE_58_ALPHABET for c in wif])
+        # assert wif.startswith('6')
         address = get_address(public_key)
-        assert all([c in BASE_58_ALPHABET for c in address])
-        assert address.startswith('T')
+        # assert all([c in BASE_58_ALPHABET for c in address])
+        # assert address.startswith('T')
         print "wif: " + wif
         print "address: " + address
     except Exception:
