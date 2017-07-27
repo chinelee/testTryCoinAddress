@@ -4,7 +4,7 @@ except ImportError:
     from distutils.core import setup
 
 setup(
-    name='btcaddr',
+    name='trycoinaddress',
     version='1.0',
     description="Generate trycoin addresses.",
     author="chinelee",
